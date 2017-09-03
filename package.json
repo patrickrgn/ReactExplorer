@@ -1,0 +1,32 @@
+{
+  "name": "ReactExplorer",
+  "version": "0.1.0",
+  "homepage": "http://localhost/reactexplorer",
+  "private": true,
+  "devDependencies": {
+    "react-scripts": "0.7.0"
+  },
+  "dependencies": {
+    "axios": "^0.16.2",
+    "boostrap": "^1.0.0",
+    "marked": "0.3.6",
+    "mime": "^1.4.0",
+    "mime-types": "^2.1.16",
+    "re-base": "2.3.0",
+    "react": "^15.3.2",
+    "react-addons-css-transition-group": "15.4.1",
+    "react-axios": "^1.0.3",
+    "react-bootstrap": "^0.31.2",
+    "react-bootstrap-table": "^4.0.2",
+    "react-cookie": "^2.0.8",
+    "react-dom": "^15.3.2",
+    "react-router": "^4.0.0-alpha.3",
+    "react-table": "^6.5.3"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
+  }
+}
