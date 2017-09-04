@@ -7,6 +7,8 @@ import Explorer from '../containers/Explorer';
 import Login from '../containers/Login';
 import { getApiToken, getApiListFiles, getApiGetFile } from '../actions/ExplorerApi';
 
+import { AppBar } from 'material-ui';
+
 import LoadingButton from '../components/LoadingButton';
 
 class App extends React.Component {
@@ -85,6 +87,7 @@ class App extends React.Component {
 
 		return (
 			<div>
+				<AppBar title="React Explorer" showMenuIconButton={false} />
 				{this.preRender(this.state.token)}
 			</div>
 

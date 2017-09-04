@@ -1,11 +1,8 @@
 // REACT
 import React from 'react';
 
-import { AppBar, TextField, RaisedButton, Paper } from 'material-ui';
+import { TextField, RaisedButton, Paper } from 'material-ui';
 import Message from '../components/Message';
-
-
-import "../css/login.css";
 
 class Login extends React.Component {
 
@@ -90,11 +87,6 @@ class Login extends React.Component {
         return (
 
             <div className="Login">
-
-                <AppBar
-                    title="React Explorer"
-                    showMenuIconButton={false}
-                />
 
                 <Paper style={styles.paper}>
 
