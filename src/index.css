@@ -8,26 +8,3 @@ body, .box > *, textarea, input {
 	font-family: 'Roboto', sans-serif;
 	color: #1d1d1d;
 }
-
-/* ----------------------------
-	STRUCTURE
----------------------------- */
-.header {
-
-
-}
-
-.ReactTable {
-	margin-top: 10px;
-}
-
-
-.modal-body {
-	/* max-height: calc(100vh - 212px);
-	max-width: calc(100vw - 12px); */
-	max-height: calc(100vh - 212px);
-	max-width: calc(100vw);
-	overflow-y: none;
-	overflow-x: auto;
-}
-

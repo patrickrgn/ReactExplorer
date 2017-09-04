@@ -83,7 +83,7 @@ class Explorer extends React.Component {
 
 		this.props.actionGetFile(path, (file) => {
 			this.setState({ file });
-			this.addMessage("Fichier chargé", "success");
+			this.addMessage("Fichier chargé: "+file.filename, "success");
 			this.setState({ showFile: true });
 
 		}, (err) => {
