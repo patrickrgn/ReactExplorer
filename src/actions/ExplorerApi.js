@@ -2,11 +2,11 @@ import axiosInstance from './AxiosExplorer';
 
 
 /**
- * Appelle l'API "getToken" pour récupérer un token à partir du login et du password
+ * Appelle l'API "getToken" pour récupérer un token JWT à partir du login et du password
  * @param {*} login 
  * @param {*} password 
- * @param {*} callbackSuccess 
- * @param {*} callbackError 
+ * @param {*} callbackSuccess (token)
+ * @param {*} callbackError (err)
  */
 export const getApiToken = (login, password, callbackSuccess, callbackError) => {
 
@@ -17,7 +17,7 @@ export const getApiToken = (login, password, callbackSuccess, callbackError) => 
         }
     };
 
-    // Récupération de la liste des fichiers
+    // Récupère le flux json
     axiosInstance.get("/getToken.php", params)
         .then(res => {
             if (res.data.token !== undefined)
@@ -32,11 +32,11 @@ export const getApiToken = (login, password, callbackSuccess, callbackError) => 
 }
 
 /**
- * 
- * @param {*} path 
- * @param {*} token 
- * @param {files, dir} callbackSuccess 
- * @param {err} callbackError 
+ * Appelle l'API "scanDir" pour récupérer le contenu du dossier
+ * @param {*} path chemin du dossier
+ * @param {*} token token JWT
+ * @param {*} callbackSuccess (files, dir)
+ * @param {err} callbackError (err)
  */
 export const getApiListFiles = (path, token, callbackSuccess, callbackError) => {
 
@@ -69,7 +69,13 @@ export const getApiListFiles = (path, token, callbackSuccess, callbackError) => 
         });
 };
 
-
+/**
+ * Appelle l'API "getFile" qui retourne le contenu d'un fichier
+ * @param {*} path chemin du fichier
+ * @param {*} token token JWT
+ * @param {*} callbackSuccess (file) 
+ * @param {*} callbackError (err)
+ */
 export const getApiGetFile = (path, token, callbackSuccess, callbackError) => {
 
     var encodedURI = encodeURIComponent(path);
