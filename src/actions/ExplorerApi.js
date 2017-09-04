@@ -26,7 +26,7 @@ export const getApiToken = (login, password, callbackSuccess, callbackError) => 
                 callbackError(res.data.error);
         })
         .catch((err) => {
-            callbackError(err);
+            callbackError(err.message);
         });
 
 }
@@ -65,7 +65,7 @@ export const getApiListFiles = (path, token, callbackSuccess, callbackError) => 
 
         })
         .catch((err) => {
-            callbackError(err);
+            callbackError(err.message);
         });
 };
 
@@ -105,7 +105,7 @@ export const getApiGetFile = (path, token, callbackSuccess, callbackError) => {
 
         })
         .catch((err) => {
-            callbackError(err);
+            callbackError(err.message);
         });
 
 };
