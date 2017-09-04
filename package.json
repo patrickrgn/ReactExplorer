@@ -10,6 +10,7 @@
     "axios": "^0.16.2",
     "boostrap": "^1.0.0",
     "marked": "0.3.6",
+    "material-ui": "^0.19.1",
     "mime": "^1.4.0",
     "mime-types": "^2.1.16",
     "re-base": "2.3.0",

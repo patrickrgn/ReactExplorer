@@ -4,7 +4,7 @@ import { render } from 'react-dom';
 
 
 // COMPONENTS
-import App from './components/App';
+import App from './containers/App';
 //import NotFound from './components/NotFound';
 
 

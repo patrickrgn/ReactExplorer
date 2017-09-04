@@ -4,44 +4,55 @@ import Breadcrumb from 'react-bootstrap/lib/Breadcrumb';
 
 class BreadcrumbExplorer extends React.Component {
 
-    componentDidMount() {
 
-        //const nav = React.findDOMNode(this).querySelector('nav.navbar');
-
-        
-    }
 
     extractNameDir = (path) => {
 
-        var tab = path.split('/');
-        return tab[tab.length - 1];
+        if (path !== undefined) {
+            var tab = path.split('/');
+            return tab[tab.length - 1];
+        } else {
+            return "";
+        }
+
     }
 
     clickDossier = (path) => {
-		this.props.actionNavigation(path);
-	}
+        this.props.actionNavigation(path);
+    }
 
 
     render() {
-        
-        
+
+
         var paths = [];
         var pathCourant = "";
-        this.props.href.split('/').forEach(path => {
-            if(paths.length > 0)
-                var newPath = pathCourant + "/" + path;
-            else
-                var newPath = path;
-            paths.push(newPath);
-            pathCourant = newPath;
-        })
 
-        const url = paths.map((item, key) => <Breadcrumb.Item id={this.extractNameDir(item)} key={item} onClick={(e) => this.clickDossier(item)}>{this.extractNameDir(item)}</Breadcrumb.Item>);
-        return (
-            <Breadcrumb>
-               {url}
-            </Breadcrumb>
-        )
+        if (this.props.href !== undefined) {
+            this.props.href.split('/').forEach(path => {
+                if (paths.length > 0)
+                    pathCourant = pathCourant + "/" + path;
+                else
+                    pathCourant = path;
+                paths.push(pathCourant);
+            });
+            const url = paths.map((item, key) => <Breadcrumb.Item id={this.extractNameDir(item)} key={item} onClick={(e) => this.clickDossier(item)}>{this.extractNameDir(item)}</Breadcrumb.Item>);
+            return (
+                <Breadcrumb>
+                    {url}
+                </Breadcrumb>
+            )
+        } else {
+            return (
+                <Breadcrumb>
+                    
+                </Breadcrumb>
+            )
+        }
+
+
+        
+        
     }
 
 

@@ -5,7 +5,6 @@ import Button from 'react-bootstrap/lib/Button';
 class LoadingButton extends React.Component {
 
     handleClick = (event) => {
-
         this.props.action();
     }
 
@@ -17,7 +16,7 @@ class LoadingButton extends React.Component {
                 bsStyle="primary"
                 disabled={isLoading}
                 onClick={!isLoading ? this.handleClick : null}>
-                {isLoading ? "Actualisation en cours" : "Actualiser le dossier"}
+                {isLoading ? this.props.msgLoading : this.props.msgLoaded}
             </Button>
         )
     }

@@ -19,7 +19,7 @@ class ContentFile extends React.Component {
 
     showContent = () => {
         var type = mime.lookup(this.props.file.filename);
-        var filename = this.props.file.filename;
+        //var filename = this.props.file.filename;
 
         if (this.state.typeImage.indexOf(type) > -1) {
            return  (<div>Image</div>)
