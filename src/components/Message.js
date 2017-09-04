@@ -24,8 +24,11 @@ class Message extends React.Component {
 
     preRender = () => {
         var message = this.props.details;
-        //return <Alert bsStyle={message.type} id={message.timestamp}>{this.formatTimestamp(message.timestamp)} : {message.text}</Alert> 
-        return <ListGroupItem bsStyle={message.type} id={message.timestamp}>{this.formatTimestamp(message.timestamp)} : {message.text}</ListGroupItem>
+
+        if(this.props.date)
+            return <ListGroupItem bsStyle={message.type} id={message.timestamp}>{this.formatTimestamp(message.timestamp)} : {message.text}</ListGroupItem>
+        else
+            return <ListGroupItem bsStyle={message.type} id={message.timestamp}>{message.text}</ListGroupItem>
     }
 
     render() {

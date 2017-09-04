@@ -11,7 +11,7 @@ class MessagesBox extends React.Component {
         
         const messages = Object
             .keys(this.props.messages)
-            .map(key => <Message key={key} details={this.props.messages[key]} />);
+            .map(key => <Message key={key} details={this.props.messages[key]} showDatetime={true} />);
 
         return (
             <div className="messageBox">

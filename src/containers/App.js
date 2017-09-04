@@ -78,7 +78,7 @@ class App extends React.Component {
 		if (token !== null && token !== "")
 			return (<div><LoadingButton action={this.deleteToken} msgLoading="Déconnexion en cours" msgLoaded="Deconnexion" isLoading={this.state.isDeconnected} /><Explorer token={this.state.token} actionListFiles={this.actionListFiles} actionGetFile={this.actionGetFile} /></div>)
 		else
-			return (<div>{this.state.message}<Login actionLogin={this.actionLogin} /></div>)
+			return (<div><Login actionLogin={this.actionLogin} msgError={this.state.message} /></div>)
 	}
 
 	render() {

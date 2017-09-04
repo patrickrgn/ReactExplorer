@@ -2,6 +2,8 @@
 import React from 'react';
 import { render } from 'react-dom';
 
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
 // COMPONENTS
 import App from './containers/App';
@@ -12,10 +14,19 @@ import App from './containers/App';
 // CSS
 import './index.css';
 
+const AppbarStyles = () => getMuiTheme({
+	palette: {
+		primary1Color: '#00bcd4'
+	}
+});
+
 
 const Root = () => {
 	return (
-		<App />
+		<MuiThemeProvider muiTheme={AppbarStyles()}>
+			<App />
+		</MuiThemeProvider>
+
 
 	)
 }
