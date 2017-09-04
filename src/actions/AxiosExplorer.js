@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const axiosInstance = axios.create({
-  baseURL: 'https://patrick-raguin.fr/reactexplorer/api',
+  baseURL: 'http://localhost/reactexplorer/api',
   timeout: 2000,
   headers: {
     'Accept': 'application/json',

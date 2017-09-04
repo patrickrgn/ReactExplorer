@@ -1,7 +1,7 @@
 {
   "name": "ReactExplorer",
   "version": "0.1.0",
-  "homepage": "https://patrick-raguin.fr/reactexplorer",
+  "homepage": "http://localhost/reactexplorer",
   "private": true,
   "devDependencies": {
     "react-scripts": "0.7.0"
