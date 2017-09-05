@@ -7,6 +7,12 @@ import NotificationsBox from '../components/NotificationsBox';
 import TableDir from '../components/TableDir';
 import ContentFile from '../components/ContentFile';
 
+import { Card, CardText, CardTitle } from 'material-ui/Card';
+
+import Grid from 'react-bootstrap/lib/Grid';
+import Row from 'react-bootstrap/lib/Row';
+import Col from 'react-bootstrap/lib/Col';
+
 class Explorer extends React.Component {
 
 	state = {
@@ -100,16 +106,39 @@ class Explorer extends React.Component {
 
 	render() {
 
-
-
+		const titleNotifications = "Notifications (" + Object.keys(this.state.messages).length + ")";
 		return (
 			<div>
+				<Grid fluid={true}>
+					<Row className="show-grid header">
+						<Col xs={12} md={8}>
+							<Card expanded={true}>
+								<CardTitle title="Navigateur" />
+								<CardText>
+									<BreadcrumbExplorer href={this.state.dir} actionNavigation={this.getListFiles} />
+									<LoadingButton action={this.getListFiles} msgLoading="Actualisation en cours" msgLoaded="Actualiser le dossier" isLoading={this.state.isLoading} />
+									<TableDir files={this.state.files} dir={this.state.dir} actionDir={this.getListFiles} actionFile={this.getFileContent} />
 
-				<NotificationsBox messages={this.state.messages} />
-				<BreadcrumbExplorer href={this.state.dir} actionNavigation={this.getListFiles} />
-				<LoadingButton action={this.getListFiles} msgLoading="Actualisation en cours" msgLoaded="Actualiser le dossier" isLoading={this.state.isLoading} />
-				<TableDir files={this.state.files} dir={this.state.dir} actionDir={this.getListFiles} actionFile={this.getFileContent} />
+								</CardText>
+							</Card>
+						</Col>
+						<Col xs={12} md={4}>
+							<Card expanded={true}>
+								<CardTitle title={titleNotifications} />
+								<CardText>
+									<NotificationsBox messages={this.state.messages} />
+								</CardText>
+							</Card>
+
+						</Col>
+					</Row>
+				</Grid>
+
+
+
+
 				<ContentFile file={this.state.file} showFile={this.state.showFile} closeFile={this.closeFile} />
+
 
 
 			</div>

@@ -8,7 +8,6 @@ import Login from './Login';
 import { getApiToken, getApiListFiles, getApiGetFile } from '../actions/ExplorerApi';
 import ToolbarExplorer from '../components/ToolbarExplorer';
 
-
 class App extends React.Component {
 
 	constructor(props) {
@@ -36,7 +35,7 @@ class App extends React.Component {
 	};
 
 	deleteToken = () => {
-		this.setState({ token: "", isDeconnected: true });
+		this.setState({ token: undefined, isDeconnected: true });
 	}
 
 	actionDeconnexion = () => {
@@ -103,15 +102,12 @@ class App extends React.Component {
 
 	render() {
 
-		const token = this.state.token;
-
-
-		if (token !== null && token !== "") {
+		if (this.state.token !== undefined) {
 			// Si utilisateur connecté => Explorer
 			return (
 				<div>
 					<ToolbarExplorer  connected={true} actionDeconnexion={this.actionDeconnexion} login={this.state.login}/>
-					<Explorer token={token}
+					<Explorer token={this.state.token}
 						actionListFiles={this.actionListFiles}
 						actionGetFile={this.actionGetFile} />
 				</div>)

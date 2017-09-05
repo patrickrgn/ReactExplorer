@@ -66,30 +66,28 @@ class TableDir extends React.Component {
 		const files = Object
 			.keys(this.props.files)
 			.map(key => <TableRow key={key} selectable={false}>
-							<TableRowColumn style={{width: '150px'}}>{this.nameFormater(this.props.files[key])}</TableRowColumn>
-							<TableRowColumn style={{width: '100px'}}>{this.sizeFormater(this.props.files[key].size)}</TableRowColumn>
-							<TableRowColumn style={{width: '200px'}}>{this.props.files[key].type}</TableRowColumn>
-							<TableRowColumn style={{width: '500px'}}>{this.props.files[key].filename}</TableRowColumn>
-						</TableRow>);
+				<TableRowColumn style={{ width: '200px' }}>{this.nameFormater(this.props.files[key])}</TableRowColumn>
+				<TableRowColumn style={{ width: '120px' }}>{this.sizeFormater(this.props.files[key].size)}</TableRowColumn>
+				<TableRowColumn style={{ width: '150px' }}>{this.props.files[key].type}</TableRowColumn>
+				<TableRowColumn>{this.props.files[key].filename}</TableRowColumn>
+			</TableRow>);
 
 		return (
 
-			<div>
-				<Table selectable={false}
-					multiSelectable={false}>
-					<TableHeader displaySelectAll={false} adjustForCheckbox={false}>
-						<TableRow>
-							<TableHeaderColumn style={{width: '150px'}}>Nom</TableHeaderColumn>
-							<TableHeaderColumn style={{width: '100px'}}>Taille</TableHeaderColumn>
-							<TableHeaderColumn style={{width: '200px'}}>Type</TableHeaderColumn>
-							<TableHeaderColumn style={{width: '500px'}}>Chemin complet</TableHeaderColumn>
-						</TableRow>
-					</TableHeader>
-					<TableBody displayRowCheckbox={false} showRowHover={true} stripedRows={true}>
-						{files}
-					</TableBody>
-				</Table>
-			</div>
+			<Table selectable={false}
+				multiSelectable={false}>
+				<TableHeader displaySelectAll={false} adjustForCheckbox={false}>
+					<TableRow>
+						<TableHeaderColumn style={{ width: '200px' }}>Nom</TableHeaderColumn>
+						<TableHeaderColumn style={{ width: '120px' }}>Taille</TableHeaderColumn>
+						<TableHeaderColumn style={{ width: '150px' }}>Type</TableHeaderColumn>
+						<TableHeaderColumn>Chemin complet</TableHeaderColumn>
+					</TableRow>
+				</TableHeader>
+				<TableBody displayRowCheckbox={false} showRowHover={true} stripedRows={true}>
+					{files}
+				</TableBody>
+			</Table>
 
 		)
 	}
