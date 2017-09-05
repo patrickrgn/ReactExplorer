@@ -49,7 +49,7 @@ class ContentFile extends React.Component {
                 <Dialog
                     title={title}
                     actions={actions}
-                    modal={true}
+                    modal={false}
                     open={this.props.showFile}
                     onRequestClose={this.handleClose}
                     autoScrollBodyContent={true}

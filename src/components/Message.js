@@ -1,9 +1,15 @@
 // REACT
 import React from 'react';
 
-import ListGroupItem from 'react-bootstrap/lib/ListGroupItem';
+import { ListItem } from 'material-ui/List';
+import Divider from 'material-ui/Divider';
+import {green500, red500} from 'material-ui/styles/colors';
+
+
 
 class Message extends React.Component {
+
+    
 
     // Convertie le timestamp au format hh:mm:ss
     formatTimestamp = (timestamp) => {
@@ -14,26 +20,33 @@ class Message extends React.Component {
         //var year    = date.getFullYear();
         //var month   = "0" + date.getMonth();
         //var day     = "0" + date.getDay();
-        var hour    = "0" + date.getHours();
-        var minute  = "0" + date.getMinutes();
-        var seconds = "0" + date.getSeconds(); 
+        var hour = "0" + date.getHours();
+        var minute = "0" + date.getMinutes();
+        var seconds = "0" + date.getSeconds();
 
-        return hour.substr(-2)+":"+minute.substr(-2)+":"+seconds.substr(-2);
-    }
-
-
-    preRender = () => {
-        var message = this.props.details;
-
-        if(this.props.date)
-            return <ListGroupItem bsStyle={message.type} id={message.timestamp}>{this.formatTimestamp(message.timestamp)} : {message.text}</ListGroupItem>
-        else
-            return <ListGroupItem bsStyle={message.type} id={message.timestamp}>{message.text}</ListGroupItem>
+        return hour.substr(-2) + ":" + minute.substr(-2) + ":" + seconds.substr(-2);
     }
 
     render() {
+
+        const message = this.props.details;
+        var diviser = "";
+        const color = message.type === 'info' ? green500 : red500
+
+        const style = {
+            color: color
+        }
+
+        if(this.props.diviser) {
+            diviser = <Divider inset={true} />
+        }
+
+        var text = message.text;
+        if (this.props.showDatetime) {
+            text = this.formatTimestamp(message.timestamp) + " : " + message.text;
+        }
         
-        return (this.preRender())
+        return (<div><ListItem primaryText={text} style={style}/>{diviser}</div>)
     }
 
 

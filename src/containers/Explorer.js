@@ -74,7 +74,7 @@ class Explorer extends React.Component {
 			this.setState({ dir: path });
 			this.setState({ files: [] });
 			this.setState({ isLoading: false });
-			this.addMessage("Erreur lors du chargement du dossier : " + err, "danger");
+			this.addMessage("Erreur lors du chargement du dossier : " + err, "error");
 		});
 
 	};
@@ -87,7 +87,7 @@ class Explorer extends React.Component {
 			this.setState({ showFile: true });
 
 		}, (err) => {
-			this.addMessage("Erreur lors de l'ouverture du fichier : " + err, "danger");
+			this.addMessage("Erreur lors de l'ouverture du fichier : " + err, "error");
 		});
 
 	};

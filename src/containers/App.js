@@ -38,6 +38,10 @@ class App extends React.Component {
 		this.setState({ token: "", isDeconnected: true });
 	}
 
+	actionDeconnexion = () => {
+		this.deleteToken();
+	}
+
 	actionLogin = (login, password) => {
 		getApiToken(login, password, (token) => {
 			this.setState({ token, isDeconnected: false });
@@ -101,7 +105,7 @@ class App extends React.Component {
 		if (token !== null && token !== "")
 			return (<div><AppBar title="React Explorer"
 							showMenuIconButton={false}
-							iconElementRight={<FlatButton label="Deconnexion" primary={true}/>} 
+							iconElementRight={<FlatButton label="Deconnexion" primary={true} onClick={this.actionDeconnexion}/>} 
 						/>
 						<Explorer token={this.state.token} 
 								actionListFiles={this.actionListFiles} 

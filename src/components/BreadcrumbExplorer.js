@@ -27,7 +27,7 @@ class BreadcrumbExplorer extends React.Component {
 
         var paths = [];
         var pathCourant = "";
-
+        var url = "";
         if (this.props.href !== undefined) {
             this.props.href.split('/').forEach(path => {
                 if (paths.length > 0)
@@ -36,23 +36,14 @@ class BreadcrumbExplorer extends React.Component {
                     pathCourant = path;
                 paths.push(pathCourant);
             });
-            const url = paths.map((item, key) => <Breadcrumb.Item id={this.extractNameDir(item)} key={item} onClick={(e) => this.clickDossier(item)}>{this.extractNameDir(item)}</Breadcrumb.Item>);
-            return (
-                <Breadcrumb>
-                    {url}
-                </Breadcrumb>
-            )
-        } else {
-            return (
-                <Breadcrumb>
-                    
-                </Breadcrumb>
-            )
+            url = paths.map((item, key) => <Breadcrumb.Item id={this.extractNameDir(item)} key={item} onClick={(e) => this.clickDossier(item)}>{this.extractNameDir(item)}</Breadcrumb.Item>);
         }
+        return (
+            <Breadcrumb>
+                {url}
+            </Breadcrumb>
+        )
 
-
-        
-        
     }
 
 
