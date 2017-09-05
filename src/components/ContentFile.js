@@ -14,6 +14,8 @@ class ContentFile extends React.Component {
 
     }
 
+    
+
     handleClose = () => {
         this.props.closeFile();
     };
@@ -43,19 +45,23 @@ class ContentFile extends React.Component {
             />
         ];
 
+        const customContentStyle = {
+            width: '80%',
+            maxWidth: 'none',
+          };
+
 
         return (
             <div>
                 <Dialog
-                    title={title}
-                    actions={actions}
-                    modal={false}
-                    open={this.props.showFile}
-                    onRequestClose={this.handleClose}
-                    autoScrollBodyContent={true}
-                >
+                title={title}
+                actions={actions}
+                modal={false}
+                open={this.props.showFile}
+                onRequestClose={this.handleClose}
+                autoScrollBodyContent={true}
+                contentStyle={customContentStyle}>
                     {this.showContent()}
-
                 </Dialog>
             </div>
         )

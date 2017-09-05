@@ -2,7 +2,7 @@
 import React from 'react';
 
 import { TextField, RaisedButton, Paper } from 'material-ui';
-import Message from '../components/Message';
+import Notification from '../components/Notification';
 
 class Login extends React.Component {
 
@@ -59,7 +59,7 @@ class Login extends React.Component {
                 text: this.props.msgError,
                 type: "danger"
             };
-            return (<div><Message key="error" details={message} showDatetime={false} /></div>)
+            return (<div><Notification key="error" details={message} showDatetime={false} /></div>)
         }
     };
 

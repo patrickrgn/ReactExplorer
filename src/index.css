@@ -8,3 +8,8 @@ body, .box > *, textarea, input {
 	font-family: 'Roboto', sans-serif;
 	color: #1d1d1d;
 }
+
+.toolbarLogin {
+	color: white;
+	margin:	0 20px;
+}

@@ -1,14 +1,9 @@
 // REACT
 import React from 'react';
 
-import Grid from 'react-bootstrap/lib/Grid';
-import Row from 'react-bootstrap/lib/Row';
-import Col from 'react-bootstrap/lib/Col';
-
-
 import LoadingButton from '../components/LoadingButton';
 import BreadcrumbExplorer from '../components/BreadcrumbExplorer';
-import MessagesBox from '../components/MessagesBox';
+import NotificationsBox from '../components/NotificationsBox';
 import TableDir from '../components/TableDir';
 import ContentFile from '../components/ContentFile';
 
@@ -16,7 +11,7 @@ class Explorer extends React.Component {
 
 	state = {
 		files: [],
-		dir: undefined,
+		dir: "C:/Developpement/wamp64/www",
 		isLoading: false,
 
 		showFile: false,
@@ -62,7 +57,7 @@ class Explorer extends React.Component {
 
 		var dir = path;
 
-		if(path == undefined)
+		if (path === undefined)
 			dir = this.state.dir;
 
 		this.setState({ isLoading: true });
@@ -88,7 +83,7 @@ class Explorer extends React.Component {
 
 		this.props.actionGetFile(path, (file) => {
 			this.setState({ file });
-			this.addMessage("Fichier chargé: "+file.filename, "success");
+			this.addMessage("Fichier chargé: " + file.filename, "success");
 			this.setState({ showFile: true });
 
 		}, (err) => {
@@ -110,23 +105,12 @@ class Explorer extends React.Component {
 		return (
 			<div>
 
-				<Grid fluid={true}>
-					<Row className="show-grid">
-						<Col xs={12} md={6}>
+				<NotificationsBox messages={this.state.messages} />
+				<BreadcrumbExplorer href={this.state.dir} actionNavigation={this.getListFiles} />
+				<LoadingButton action={this.getListFiles} msgLoading="Actualisation en cours" msgLoaded="Actualiser le dossier" isLoading={this.state.isLoading} />
+				<TableDir files={this.state.files} dir={this.state.dir} actionDir={this.getListFiles} actionFile={this.getFileContent} />
+				<ContentFile file={this.state.file} showFile={this.state.showFile} closeFile={this.closeFile} />
 
-							<BreadcrumbExplorer href={this.state.dir} actionNavigation={this.getListFiles} />
-							<LoadingButton action={this.getListFiles} msgLoading="Actualisation en cours" msgLoaded="Actualiser le dossier" isLoading={this.state.isLoading} />
-							<TableDir files={this.state.files} dir={this.state.dir} actionDir={this.getListFiles} actionFile={this.getFileContent} />
-
-						</Col>
-						<Col xs={12} md={6}>
-							<MessagesBox messages={this.state.messages} />
-							<ContentFile file={this.state.file} showFile={this.state.showFile} closeFile={this.closeFile} />
-						</Col>
-					</Row>
-
-
-				</Grid>
 
 			</div>
 		)

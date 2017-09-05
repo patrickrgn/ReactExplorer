@@ -3,11 +3,11 @@ import React from 'react';
 
 
 
-import Explorer from '../containers/Explorer';
-import Login from '../containers/Login';
+import Explorer from './Explorer';
+import Login from './Login';
 import { getApiToken, getApiListFiles, getApiGetFile } from '../actions/ExplorerApi';
+import ToolbarExplorer from '../components/ToolbarExplorer';
 
-import { AppBar, FlatButton } from 'material-ui';
 
 class App extends React.Component {
 
@@ -23,8 +23,9 @@ class App extends React.Component {
 
 
 	state = {
-		token: "",
-		message: "",
+		token: undefined,
+		login: undefined,
+		message: undefined,
 		isDeconnected: true
 	};
 
@@ -44,7 +45,7 @@ class App extends React.Component {
 
 	actionLogin = (login, password) => {
 		getApiToken(login, password, (token) => {
-			this.setState({ token, isDeconnected: false });
+			this.setState({ token, isDeconnected: false, login });
 		}, (err) => {
 			this.setState({ message: err })
 		});
@@ -100,34 +101,28 @@ class App extends React.Component {
 		event.preventDefault();
 	};
 
-	preRender = (token) => {
-
-		if (token !== null && token !== "")
-			return (<div><AppBar title="React Explorer"
-							showMenuIconButton={false}
-							iconElementRight={<FlatButton label="Deconnexion" primary={true} onClick={this.actionDeconnexion}/>} 
-						/>
-						<Explorer token={this.state.token} 
-								actionListFiles={this.actionListFiles} 
-								actionGetFile={this.actionGetFile} />
-					</div>)
-		else
-			return (<div>
-						<AppBar title="React Explorer" showMenuIconButton={false} />
-						<Login actionLogin={this.actionLogin} msgError={this.state.message} />
-					</div>)
-	}
-
-
 	render() {
 
-		return (
-			<div>
-				{this.preRender(this.state.token)}
-			</div>
+		const token = this.state.token;
 
 
-		)
+		if (token !== null && token !== "") {
+			// Si utilisateur connecté => Explorer
+			return (
+				<div>
+					<ToolbarExplorer  connected={true} actionDeconnexion={this.actionDeconnexion} login={this.state.login}/>
+					<Explorer token={token}
+						actionListFiles={this.actionListFiles}
+						actionGetFile={this.actionGetFile} />
+				</div>)
+		} else {
+			// Si utilisateur non connecté => Login
+			return (
+				<div>
+					<ToolbarExplorer connected={false}/>
+					<Login actionLogin={this.actionLogin} msgError={this.state.message} />
+				</div>)
+		}
 	}
 
 

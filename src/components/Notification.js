@@ -7,7 +7,7 @@ import {green500, orange500, red500} from 'material-ui/styles/colors';
 
 
 
-class Message extends React.Component {
+class Notification extends React.Component {
 
     
 
@@ -60,4 +60,4 @@ class Message extends React.Component {
 
 }
 
-export default Message;
+export default Notification;

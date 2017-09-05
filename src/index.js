@@ -22,7 +22,8 @@ const AppbarStyles = () => getMuiTheme({
 		primaryTextColor: white
 	},
 	flatButton: {
-		buttonColor: white
+		buttonColor: white,
+		backgroundColor: white
 	},
 	tableRow: {
 		stripeColor: grey50

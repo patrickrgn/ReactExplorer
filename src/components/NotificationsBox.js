@@ -4,16 +4,16 @@ import React from 'react';
 import { List } from 'material-ui/List';
 import { Card, CardHeader, CardText } from 'material-ui/Card';
 
-import Message from './Message';
+import Notification from './Notification';
 
-class MessagesBox extends React.Component {
+class NotificationsBox extends React.Component {
 
 
     render() {
 
         const messages = Object
             .keys(this.props.messages)
-            .map(key => <Message key={key} details={this.props.messages[key]} showDatetime={true} diviser={true} />);
+            .map(key => <Notification key={key} details={this.props.messages[key]} showDatetime={true} diviser={true} />);
             
         const title = "Notifications ("+Object.keys(this.props.messages).length+")";
         return (
@@ -39,4 +39,4 @@ class MessagesBox extends React.Component {
 
 }
 
-export default MessagesBox;
+export default NotificationsBox;

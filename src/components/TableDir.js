@@ -1,10 +1,6 @@
 // REACT
 import React from 'react';
 
-// Import React Table
-//import {BootstrapTable, TableHeaderColumn} from 'react-bootstrap-table';
-//import '../../node_modules/react-bootstrap-table/dist/react-bootstrap-table-all.min.css';
-
 import {
 	Table,
 	TableBody,
@@ -50,6 +46,16 @@ class TableDir extends React.Component {
 			return (<a href="#" onClick={(e) => this.clickFile(file.filename)}>{file.name}</a>);
 	};
 
+	sizeFormater = (size) => {
+
+		var aSize = Math.abs(parseInt(size, 10));
+		var def = [[1, 'octets'], [1024, 'ko'], [1024 * 1024, 'Mo'], [1024 * 1024 * 1024, 'Go'], [1024 * 1024 * 1024 * 1024, 'To']];
+		for (var i = 0; i < def.length; i++) {
+			if (aSize < def[i][0]) return (aSize / def[i - 1][0]).toFixed(2) + ' ' + def[i - 1][1];
+		}
+
+	}
+
 	showRows = () => {
 
 
@@ -59,22 +65,24 @@ class TableDir extends React.Component {
 
 		const files = Object
 			.keys(this.props.files)
-			.map(key => <TableRow key={key} selectable={false}><TableRowColumn>{this.nameFormater(this.props.files[key])}</TableRowColumn>
-				<TableRowColumn>{this.props.files[key].size}</TableRowColumn>
-				<TableRowColumn>{this.props.files[key].type}</TableRowColumn>
-				<TableRowColumn>{this.props.files[key].filename}</TableRowColumn></TableRow>);
+			.map(key => <TableRow key={key} selectable={false}>
+							<TableRowColumn style={{width: '150px'}}>{this.nameFormater(this.props.files[key])}</TableRowColumn>
+							<TableRowColumn style={{width: '100px'}}>{this.sizeFormater(this.props.files[key].size)}</TableRowColumn>
+							<TableRowColumn style={{width: '200px'}}>{this.props.files[key].type}</TableRowColumn>
+							<TableRowColumn style={{width: '500px'}}>{this.props.files[key].filename}</TableRowColumn>
+						</TableRow>);
 
 		return (
 
 			<div>
 				<Table selectable={false}
 					multiSelectable={false}>
-					<TableHeader displaySelectAll={false}>
+					<TableHeader displaySelectAll={false} adjustForCheckbox={false}>
 						<TableRow>
-							<TableHeaderColumn>Nom</TableHeaderColumn>
-							<TableHeaderColumn>Taille</TableHeaderColumn>
-							<TableHeaderColumn>Type</TableHeaderColumn>
-							<TableHeaderColumn>Chemin complet</TableHeaderColumn>
+							<TableHeaderColumn style={{width: '150px'}}>Nom</TableHeaderColumn>
+							<TableHeaderColumn style={{width: '100px'}}>Taille</TableHeaderColumn>
+							<TableHeaderColumn style={{width: '200px'}}>Type</TableHeaderColumn>
+							<TableHeaderColumn style={{width: '500px'}}>Chemin complet</TableHeaderColumn>
 						</TableRow>
 					</TableHeader>
 					<TableBody displayRowCheckbox={false} showRowHover={true} stripedRows={true}>
