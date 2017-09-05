@@ -30,7 +30,8 @@ class App extends React.Component {
 
 
 	componentDidUpdate = (prevProps, prevState) => {
-		localStorage.token = this.state.token;
+		if (this.state.token !== prevState.token)
+			localStorage.token = this.state.token;
 	};
 
 	deleteToken = () => {
