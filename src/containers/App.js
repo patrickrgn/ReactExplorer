@@ -7,9 +7,7 @@ import Explorer from '../containers/Explorer';
 import Login from '../containers/Login';
 import { getApiToken, getApiListFiles, getApiGetFile } from '../actions/ExplorerApi';
 
-import { AppBar } from 'material-ui';
-
-import LoadingButton from '../components/LoadingButton';
+import { AppBar, FlatButton } from 'material-ui';
 
 class App extends React.Component {
 
@@ -29,7 +27,7 @@ class App extends React.Component {
 		message: "",
 		isDeconnected: true
 	};
-	
+
 
 	componentDidUpdate = (prevProps, prevState) => {
 		localStorage.token = this.state.token;
@@ -41,7 +39,7 @@ class App extends React.Component {
 
 	actionLogin = (login, password) => {
 		getApiToken(login, password, (token) => {
-			this.setState({ token, isDeconnected:false });
+			this.setState({ token, isDeconnected: false });
 		}, (err) => {
 			this.setState({ message: err })
 		});
@@ -74,20 +72,52 @@ class App extends React.Component {
 
 	};
 
+	handleSubmit = event => {
+		var error = false;
+		if (this.state.login === undefined || this.state.login === "") {
+			this.setState({ errorLogin: "Champs requis" });
+			error = true;
+		} else {
+			this.setState({ errorLogin: "" });
+		}
+		if (this.state.password === undefined || this.state.password === "") {
+			this.setState({ errorPassword: "Champs requis" });
+			error = true;
+		} else {
+			this.setState({ errorPassword: "" });
+		}
+
+
+		if (!error) {
+			this.props.actionLogin(this.state.login, this.state.password);
+		}
+
+		event.preventDefault();
+	};
 
 	preRender = (token) => {
 
 		if (token !== null && token !== "")
-			return (<div><LoadingButton action={this.deleteToken} msgLoading="Déconnexion en cours" msgLoaded="Deconnexion" isLoading={this.state.isDeconnected} /><Explorer token={this.state.token} actionListFiles={this.actionListFiles} actionGetFile={this.actionGetFile} /></div>)
+			return (<div><AppBar title="React Explorer"
+							showMenuIconButton={false}
+							iconElementRight={<FlatButton label="Deconnexion" primary={true}/>} 
+						/>
+						<Explorer token={this.state.token} 
+								actionListFiles={this.actionListFiles} 
+								actionGetFile={this.actionGetFile} />
+					</div>)
 		else
-			return (<div><Login actionLogin={this.actionLogin} msgError={this.state.message} /></div>)
+			return (<div>
+						<AppBar title="React Explorer" showMenuIconButton={false} />
+						<Login actionLogin={this.actionLogin} msgError={this.state.message} />
+					</div>)
 	}
+
 
 	render() {
 
 		return (
 			<div>
-				<AppBar title="React Explorer" showMenuIconButton={false} />
 				{this.preRender(this.state.token)}
 			</div>
 

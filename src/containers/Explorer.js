@@ -106,11 +106,6 @@ class Explorer extends React.Component {
 			<div>
 
 				<Grid fluid={true}>
-					<Row className="show-grid header">
-						<Col xs={12} md={12}>
-							<h1><center>React Explorer</center></h1>
-						</Col>
-					</Row>
 					<Row className="show-grid">
 						<Col xs={12} md={6}>
 

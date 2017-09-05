@@ -1,23 +1,35 @@
 // REACT
 import React from 'react';
-import Button from 'react-bootstrap/lib/Button';
+import { RaisedButton } from 'material-ui';
 
 class LoadingButton extends React.Component {
+
 
     handleClick = (event) => {
         this.props.action();
     }
 
+    preRender =  () => {
+        if(this.props.isLoading) {
+            return (<RaisedButton
+                label={this.props.msgLoading}
+                primary={true}
+                disabled={true}
+                onMouseUp={this.handleClick} />)
+        } else {
+            return (<RaisedButton
+                label={this.props.msgLoaded}
+                primary={true}
+                
+                onMouseUp={this.handleClick} />)
+        }
+
+    }
+
 
     render() {
-        let isLoading = this.props.isLoading;
         return (
-            <Button
-                bsStyle="primary"
-                disabled={isLoading}
-                onClick={!isLoading ? this.handleClick : null}>
-                {isLoading ? this.props.msgLoading : this.props.msgLoaded}
-            </Button>
+            this.preRender()
         )
     }
 

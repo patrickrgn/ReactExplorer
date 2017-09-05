@@ -1,16 +1,34 @@
 // REACT
 import React from 'react';
-//import { render } from 'react-dom';
 
 // Import React Table
-//import ReactTable from "react-table";
-//import "react-table/react-table.css";
-import {BootstrapTable, TableHeaderColumn} from 'react-bootstrap-table';
+//import {BootstrapTable, TableHeaderColumn} from 'react-bootstrap-table';
+//import '../../node_modules/react-bootstrap-table/dist/react-bootstrap-table-all.min.css';
 
-import '../../node_modules/react-bootstrap-table/dist/react-bootstrap-table-all.min.css';
+import {
+	Table,
+	TableBody,
+	TableHeader,
+	TableHeaderColumn,
+	TableRow,
+	TableRowColumn,
+} from 'material-ui/Table';
 
 class TableDir extends React.Component {
 
+	state = {
+		selected: [],
+	};
+
+	isSelected = (index) => {
+		return this.state.selected.indexOf(index) !== -1;
+	};
+
+	handleRowSelection = (selectedRows) => {
+		this.setState({
+			selected: selectedRows,
+		});
+	};
 
 
 	// Action si l'utilisateur clique sur un Dossier
@@ -25,28 +43,44 @@ class TableDir extends React.Component {
 
 
 	// Gère le lien sur le nom
-	nameFormater = (cell, row) => {
-		if(row.type === "Dossier")
-			return (<a href="#" onClick={(e) => this.clickDir(row.filename)}>{cell}</a>);
+	nameFormater = (file) => {
+		if (file.type === "Dossier")
+			return (<a href="#" onClick={(e) => this.clickDir(file.filename)}>{file.name}</a>);
 		else
-			return (<a href="#" onClick={(e) => this.clickFile(row.filename)}>{cell}</a>);
+			return (<a href="#" onClick={(e) => this.clickFile(file.filename)}>{file.name}</a>);
 	};
+
+	showRows = () => {
+
+
+	}
 
 	render() {
 
-
+		const files = Object
+			.keys(this.props.files)
+			.map(key => <TableRow key={key} selectable={false}><TableRowColumn>{this.nameFormater(this.props.files[key])}</TableRowColumn>
+				<TableRowColumn>{this.props.files[key].size}</TableRowColumn>
+				<TableRowColumn>{this.props.files[key].type}</TableRowColumn>
+				<TableRowColumn>{this.props.files[key].filename}</TableRowColumn></TableRow>);
 
 		return (
 
 			<div>
-
-				<BootstrapTable data={this.props.files} search={true} multiColumnSearch={true} striped hover>
-			      <TableHeaderColumn isKey dataField='name' dataSort={ true } dataFormat={ this.nameFormater }>Nom</TableHeaderColumn>
-			      <TableHeaderColumn dataField='size' dataSort={ true }>Taille</TableHeaderColumn>
-			      <TableHeaderColumn dataField='type' dataSort={ true }>Type</TableHeaderColumn>
-			      <TableHeaderColumn dataField='filename' dataSort={ true }>Chemin complet</TableHeaderColumn>
-			  </BootstrapTable>
-
+				<Table selectable={false}
+					multiSelectable={false}>
+					<TableHeader displaySelectAll={false}>
+						<TableRow>
+							<TableHeaderColumn>Nom</TableHeaderColumn>
+							<TableHeaderColumn>Taille</TableHeaderColumn>
+							<TableHeaderColumn>Type</TableHeaderColumn>
+							<TableHeaderColumn>Chemin complet</TableHeaderColumn>
+						</TableRow>
+					</TableHeader>
+					<TableBody displayRowCheckbox={false} showRowHover={true} stripedRows={true}>
+						{files}
+					</TableBody>
+				</Table>
 			</div>
 
 		)
