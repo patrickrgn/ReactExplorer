@@ -3,7 +3,7 @@ import React from 'react';
 
 import { ListItem } from 'material-ui/List';
 import Divider from 'material-ui/Divider';
-import {green500, red500} from 'material-ui/styles/colors';
+import {green500, orange500, red500} from 'material-ui/styles/colors';
 
 
 
@@ -31,7 +31,14 @@ class Message extends React.Component {
 
         const message = this.props.details;
         var diviser = "";
-        const color = message.type === 'info' ? green500 : red500
+
+        var color = null;
+        if(message.type === "info")
+            color = orange500;
+        else if(message.type === "success")
+            color = green500;
+        else
+            color = red500;
 
         const style = {
             color: color
