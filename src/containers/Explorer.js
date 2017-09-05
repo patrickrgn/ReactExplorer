@@ -16,7 +16,7 @@ class Explorer extends React.Component {
 
 	state = {
 		files: [],
-		dir: "",
+		dir: undefined,
 		isLoading: false,
 
 		showFile: false,
@@ -60,10 +60,15 @@ class Explorer extends React.Component {
 
 	getListFiles = (path) => {
 
-		this.setState({ isLoading: true });
-		this.addMessage("Chargement du dossier : " + path, "info");
+		var dir = path;
 
-		this.props.actionListFiles(path, (files, dir) => {
+		if(path == undefined)
+			dir = this.state.dir;
+
+		this.setState({ isLoading: true });
+		this.addMessage("Chargement du dossier : " + dir, "info");
+
+		this.props.actionListFiles(dir, (files, dir) => {
 
 			this.setState({ dir: dir });
 			this.setState({ files });
@@ -71,7 +76,7 @@ class Explorer extends React.Component {
 
 			this.addMessage("Dossier chargé", "success");
 		}, (err) => {
-			this.setState({ dir: path });
+			this.setState({ dir: dir });
 			this.setState({ files: [] });
 			this.setState({ isLoading: false });
 			this.addMessage("Erreur lors du chargement du dossier : " + err, "error");

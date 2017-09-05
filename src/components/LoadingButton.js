@@ -20,7 +20,6 @@ class LoadingButton extends React.Component {
             return (<RaisedButton
                 label={this.props.msgLoaded}
                 primary={true}
-                
                 onMouseUp={this.handleClick} />)
         }
 
