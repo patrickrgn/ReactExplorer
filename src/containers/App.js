@@ -77,14 +77,20 @@ class App extends React.Component {
 
 	};
 
-	actionCreateFile = (path, content, callbackSuccess, callbackError) => {
-		apiCreateFile(path, content, this.state.token, () => {
-			callbackSuccess();
-		}, (err) => {
-			if (err === "Erreur token") {
-				this.deleteToken();
-			}
-			callbackError(err);
+	actionCreateFile = (path, content) => {
+		var _this = this;
+		return new Promise(function (resolve, reject) {
+
+			apiCreateFile(path, content, _this.state.token)
+				.then(res => {
+					resolve(true);
+				})
+				.catch((err) => {
+					if (err === "Erreur token") {
+						this.deleteToken();
+					}
+					reject(err);
+				});
 		});
 
 	};
@@ -118,17 +124,17 @@ class App extends React.Component {
 			// Si utilisateur connecté => Explorer
 			return (
 				<div>
-					<ToolbarExplorer  connected={true} actionDeconnexion={this.actionDeconnexion} login={this.state.login}/>
+					<ToolbarExplorer connected={true} actionDeconnexion={this.actionDeconnexion} login={this.state.login} />
 					<Explorer token={this.state.token}
 						actionGetListFiles={this.actionGetListFiles}
-						actionGetFile={this.actionGetFile} 
-						actionCreateFile={this.actionCreateFile}/>
+						actionGetFile={this.actionGetFile}
+						actionCreateFile={this.actionCreateFile} />
 				</div>)
 		} else {
 			// Si utilisateur non connecté => Login
 			return (
 				<div>
-					<ToolbarExplorer connected={false}/>
+					<ToolbarExplorer connected={false} />
 					<Login actionLogin={this.actionLogin} msgError={this.state.message} />
 				</div>)
 		}

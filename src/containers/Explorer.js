@@ -18,7 +18,7 @@ class Explorer extends React.Component {
 
 	state = {
 		files: [],
-		dir: "C:/Developpement/wamp64/www",
+		dir: "C:/Developpement/wamp64/www/test",
 
 		// Popin ShowDile
 		isLoading: false,
@@ -122,22 +122,21 @@ class Explorer extends React.Component {
 	saveFile = (name, content) => {
 		this.setState({ isSaving: true });
 		var path = this.state.dir + "/" + name;
-		this.props.actionCreateFile(path, content, () => {
-			// success
+		this.props.actionCreateFile(path, content)
+		.then(res => {
 			this.addMessage("Fichier créé", "success");
-		}, (err) => {
-			// error
-			this.addMessage("Erreur lors de la création du fichier : " + err, "error");
+			this.getListFiles();
+		})
+		.catch((err) => {
+			this.addMessage("Erreur lors de la création du fichier : " + err, "error");	
 		});
+
+
 		this.setState({ showPopinEditFile: false, isSaving: false });
-		this.getListFiles();
+		
 	}
 
-
-
 	render() {
-
-
 
 		const titleNotifications = "Notifications (" + Object.keys(this.state.messages).length + ")";
 

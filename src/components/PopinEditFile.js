@@ -84,7 +84,6 @@ class PopinEditFile extends React.Component {
                     autoScrollBodyContent={true}
                     contentStyle={customContentStyle}>
 
-
                     <Paper style={styles.paper}>
                         <TextField
                             id="name"
