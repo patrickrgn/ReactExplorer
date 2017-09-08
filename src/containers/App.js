@@ -5,7 +5,7 @@ import React from 'react';
 
 import Explorer from './Explorer';
 import Login from './Login';
-import { apiGetToken, apiGetListFiles, apiGetFile, apiCreateFile } from '../actions/ExplorerApi';
+import { apiGetToken, apiGetListFiles, apiGetFile, apiCreateFile, apiDeleteFile } from '../actions/ExplorerApi';
 import ToolbarExplorer from '../components/ToolbarExplorer';
 
 class App extends React.Component {
@@ -42,57 +42,61 @@ class App extends React.Component {
 		this.deleteToken();
 	}
 
-	actionLogin = (login, password) => {
-		apiGetToken(login, password, (token) => {
-			this.setState({ token, isDeconnected: false, login });
-		}, (err) => {
-			this.setState({ message: err })
-		});
+	// Vérifie le message d'erreur
+	// S'il s'agit d'une erreur de token, on le supprime du state
+	verifyErrorToken = (err) => {
+		if (err === "Erreur token") {
+			this.deleteToken();
+		}
 	}
 
-	actionGetListFiles = (path, callbackSuccess, callbackError) => {
-		if (this.state.token !== "") {
-			apiGetListFiles(path, this.state.token, (files, dir) => {
-				callbackSuccess(files, dir);
-			}, (err) => {
-				if (err === "Erreur token") {
-					this.deleteToken();
-				}
-				callbackError(err);
-			});
-		}
+	actionLogin = (login, password) => {
+		apiGetToken(login, password)
+			.then(token => this.setState({ token, isDeconnected: false, login }))
+			.catch(err => this.setState({ message: err }));
+	}
 
+	actionGetListFiles = (path) => {
+		var token = this.state.token;
+		var _this = this;
+		return new Promise((resolve, reject) => {
+			apiGetListFiles(path, token)
+				.then(res => resolve(res))
+				.catch(err => _this.verifyErrorToken(err))
+				.catch(err => reject(err));
+		});
 	};
 
-	actionGetFile = (path, callbackSuccess, callbackError) => {
-		apiGetFile(path, this.state.token, (file) => {
-			callbackSuccess(file);
-
-		}, (err) => {
-			if (err === "Erreur token") {
-				this.deleteToken();
-			}
-			callbackError(err);
+	actionGetFile = (path) => {
+		var _this = this;
+		var token = this.state.token;
+		return new Promise((resolve, reject) => {
+			apiGetFile(path, token)
+				.then(res => resolve(res))
+				.catch(err => _this.verifyErrorToken(err))
+				.catch(err => reject(err));
 		});
+	};
 
+	actionDeleteFile = (path) => {
+		var _this = this;
+		var token = this.state.token;
+		return new Promise((resolve, reject) => {
+			apiDeleteFile(path, token)
+				.then(res => resolve(res))
+				.catch(err => _this.verifyErrorToken(err))
+				.catch(err => reject(err));
+		});
 	};
 
 	actionCreateFile = (path, content) => {
 		var _this = this;
-		return new Promise(function (resolve, reject) {
-
+		return new Promise((resolve, reject) => {
 			apiCreateFile(path, content, _this.state.token)
-				.then(res => {
-					resolve(true);
-				})
-				.catch((err) => {
-					if (err === "Erreur token") {
-						this.deleteToken();
-					}
-					reject(err);
-				});
+				.then(res => resolve(true))
+				.catch(err => _this.verifyErrorToken(err))
+				.catch(err => reject(err));
 		});
-
 	};
 
 	handleSubmit = event => {
@@ -128,7 +132,8 @@ class App extends React.Component {
 					<Explorer token={this.state.token}
 						actionGetListFiles={this.actionGetListFiles}
 						actionGetFile={this.actionGetFile}
-						actionCreateFile={this.actionCreateFile} />
+						actionCreateFile={this.actionCreateFile}
+						actionDeleteFile={this.actionDeleteFile} />
 				</div>)
 		} else {
 			// Si utilisateur non connecté => Login

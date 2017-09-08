@@ -75,33 +75,42 @@ class Explorer extends React.Component {
 		this.setState({ isLoading: true });
 		//this.addMessage("Chargement du dossier : " + dir, "info");
 
-		this.props.actionGetListFiles(dir, (files, dir) => {
-			this.setState({ dir: dir });
-			this.setState({ files });
-			this.setState({ isLoading: false });
+		this.props.actionGetListFiles(dir)
+			.then(res => {
+				this.setState({ dir: res.dir });
+				this.setState({ files: res.files });
+				this.setState({ isLoading: false });
 
-			this.addMessage("Dossier chargé", "success");
-		}, (err) => {
-			this.setState({ dir: dir });
-			this.setState({ files: [] });
-			this.setState({ isLoading: false });
-			this.addMessage("Erreur lors du chargement du dossier : " + err, "error");
-		});
+				this.addMessage("Dossier chargé", "success");
+			})
+			.catch(err => {
+				this.setState({ files: [] });
+				this.setState({ isLoading: false });
+				this.addMessage("Erreur lors du chargement du dossier : " + err, "error");
+			});
 
 	};
 
 
 	// Fonctions pour la popin ShowFile
-	getFileContent = (path) => {
+	getFile = (path) => {
+		this.props.actionGetFile(path)
+			.then(res => {
+				this.setState({ file: res });
+				this.addMessage("Fichier chargé: " + res.filename, "success");
+				this.setState({ showPopinShowFile: true });
+			})
+			.catch(err => {
+				this.addMessage("Erreur lors de l'ouverture du fichier : " + err, "error");
+			});
+	};
 
-		this.props.actionGetFile(path, (file) => {
-			this.setState({ file });
-			this.addMessage("Fichier chargé: " + file.filename, "success");
-			this.setState({ showPopinShowFile: true });
-
-		}, (err) => {
-			this.addMessage("Erreur lors de l'ouverture du fichier : " + err, "error");
-		});
+	// Fonctions pour la popin ShowFile
+	deleteFile = (path) => {
+		this.props.actionDeleteFile(path)
+			.then(res => this.addMessage("Fichier supprimé: " + res.filename, "success"))
+			.then(res => this.getListFiles())
+			.catch(err => this.addMessage("Erreur lors de l'ouverture du fichier : " + err, "error"));
 
 	};
 
@@ -123,17 +132,11 @@ class Explorer extends React.Component {
 		this.setState({ isSaving: true });
 		var path = this.state.dir + "/" + name;
 		this.props.actionCreateFile(path, content)
-		.then(res => {
-			this.addMessage("Fichier créé", "success");
-			this.getListFiles();
-		})
-		.catch((err) => {
-			this.addMessage("Erreur lors de la création du fichier : " + err, "error");	
-		});
-
+			.then(res => this.addMessage("Fichier créé", "success"))
+			.then(res => this.getListFiles())
+			.catch((err) => this.addMessage("Erreur lors de la création du fichier : " + err, "error"));
 
 		this.setState({ showPopinEditFile: false, isSaving: false });
-		
 	}
 
 	render() {
@@ -170,8 +173,9 @@ class Explorer extends React.Component {
 									<TableDir
 										files={this.state.files}
 										dir={this.state.dir}
-										actionDir={this.getListFiles}
-										actionFile={this.getFileContent} />
+										actionListFiles={this.getListFiles}
+										actionGetFile={this.getFile} 
+										actionDeleteFile={this.deleteFile}/>
 
 								</CardText>
 							</Card>

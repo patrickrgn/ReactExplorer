@@ -11,6 +11,7 @@
     "boostrap": "^1.0.0",
     "eslint": "^4.6.1",
     "marked": "0.3.6",
+    "material-design-icons": "^3.0.1",
     "material-ui": "^0.19.1",
     "mime": "^1.4.0",
     "mime-types": "^2.1.16",
