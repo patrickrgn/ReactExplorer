@@ -23,8 +23,9 @@ class Notification extends React.Component {
         var hour = "0" + date.getHours();
         var minute = "0" + date.getMinutes();
         var seconds = "0" + date.getSeconds();
+        var mseconds = date.getMilliseconds();
 
-        return hour.substr(-2) + ":" + minute.substr(-2) + ":" + seconds.substr(-2);
+        return hour.substr(-2) + ":" + minute.substr(-2) + ":" + seconds.substr(-2) + "," + mseconds;
     }
 
     render() {
