@@ -5,7 +5,7 @@ import mime from 'mime-types';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 
-class ContentFile extends React.Component {
+class PopinShowFile extends React.Component {
 
     
     state = {
@@ -17,7 +17,7 @@ class ContentFile extends React.Component {
     
 
     handleClose = () => {
-        this.props.closeFile();
+        this.props.close();
     };
 
     showContent = () => {
@@ -71,4 +71,4 @@ class ContentFile extends React.Component {
 
 }
 
-export default ContentFile;
+export default PopinShowFile;

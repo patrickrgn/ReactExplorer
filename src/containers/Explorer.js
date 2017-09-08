@@ -5,7 +5,8 @@ import LoadingButton from '../components/LoadingButton';
 import BreadcrumbExplorer from '../components/BreadcrumbExplorer';
 import NotificationsBox from '../components/NotificationsBox';
 import TableDir from '../components/TableDir';
-import ContentFile from '../components/ContentFile';
+import PopinShowFile from '../components/PopinShowFile';
+import PopinEditFile from '../components/PopinEditFile';
 
 import { Card, CardText, CardTitle } from 'material-ui/Card';
 
@@ -18,10 +19,15 @@ class Explorer extends React.Component {
 	state = {
 		files: [],
 		dir: "C:/Developpement/wamp64/www",
-		isLoading: false,
 
-		showFile: false,
+		// Popin ShowDile
+		isLoading: false,
+		showPopinShowFile: false,
 		file: {},
+
+		// Popin EditFile
+		showPopinEditFile: false,
+		isSaving: false,
 
 		messages: [],
 		domain: "http://localhost/explorerreact/"
@@ -67,10 +73,9 @@ class Explorer extends React.Component {
 			dir = this.state.dir;
 
 		this.setState({ isLoading: true });
-		this.addMessage("Chargement du dossier : " + dir, "info");
+		//this.addMessage("Chargement du dossier : " + dir, "info");
 
-		this.props.actionListFiles(dir, (files, dir) => {
-
+		this.props.actionGetListFiles(dir, (files, dir) => {
 			this.setState({ dir: dir });
 			this.setState({ files });
 			this.setState({ isLoading: false });
@@ -85,12 +90,14 @@ class Explorer extends React.Component {
 
 	};
 
+
+	// Fonctions pour la popin ShowFile
 	getFileContent = (path) => {
 
 		this.props.actionGetFile(path, (file) => {
 			this.setState({ file });
 			this.addMessage("Fichier chargé: " + file.filename, "success");
-			this.setState({ showFile: true });
+			this.setState({ showPopinShowFile: true });
 
 		}, (err) => {
 			this.addMessage("Erreur lors de l'ouverture du fichier : " + err, "error");
@@ -98,15 +105,42 @@ class Explorer extends React.Component {
 
 	};
 
-	closeFile = () => {
-		this.setState({ showFile: false });
-
+	closePopinShowFile = () => {
+		this.setState({ showPopinShowFile: false });
 	}
+
+
+	// Fonctions pour la popin EditFile
+	showPopinEditFile = () => {
+		this.setState({ showPopinEditFile: true });
+	}
+
+	closePopinEditFile = () => {
+		this.setState({ showPopinEditFile: false, isSaving: false });
+	}
+
+	saveFile = (name, content) => {
+		this.setState({ isSaving: true });
+		var path = this.state.dir + "/" + name;
+		this.props.actionCreateFile(path, content, () => {
+			// success
+			this.addMessage("Fichier créé", "success");
+		}, (err) => {
+			// error
+			this.addMessage("Erreur lors de la création du fichier : " + err, "error");
+		});
+		this.setState({ showPopinEditFile: false, isSaving: false });
+		this.getListFiles();
+	}
+
 
 
 	render() {
 
+
+
 		const titleNotifications = "Notifications (" + Object.keys(this.state.messages).length + ")";
+
 		return (
 			<div>
 				<Grid fluid={true}>
@@ -115,9 +149,30 @@ class Explorer extends React.Component {
 							<Card expanded={true}>
 								<CardTitle title="Navigateur" />
 								<CardText>
-									<BreadcrumbExplorer href={this.state.dir} actionNavigation={this.getListFiles} />
-									<LoadingButton action={this.getListFiles} msgLoading="Actualisation en cours" msgLoaded="Actualiser le dossier" isLoading={this.state.isLoading} />
-									<TableDir files={this.state.files} dir={this.state.dir} actionDir={this.getListFiles} actionFile={this.getFileContent} />
+									<BreadcrumbExplorer
+										href={this.state.dir}
+										actionNavigation={this.getListFiles} />
+
+									<LoadingButton
+										id="button_actualisation"
+										type="primary"
+										action={this.getListFiles}
+										msgLoading="Actualisation en cours"
+										msgLoaded="Actualiser le dossier"
+										isLoading={this.state.isLoading} />
+
+									<LoadingButton
+										id="button_creer_fichier"
+										type="secondary"
+										action={this.showPopinEditFile}
+										msgLoaded="Créer un fichier"
+										isLoading={false} />
+
+									<TableDir
+										files={this.state.files}
+										dir={this.state.dir}
+										actionDir={this.getListFiles}
+										actionFile={this.getFileContent} />
 
 								</CardText>
 							</Card>
@@ -134,13 +189,16 @@ class Explorer extends React.Component {
 					</Row>
 				</Grid>
 
+				<PopinShowFile
+					file={this.state.file}
+					showFile={this.state.showPopinShowFile}
+					close={this.closePopinShowFile} />
 
-
-
-				<ContentFile file={this.state.file} showFile={this.state.showFile} closeFile={this.closeFile} />
-
-
-
+				<PopinEditFile
+					showPopin={this.state.showPopinEditFile}
+					actionClose={this.closePopinEditFile}
+					actionSaveFile={this.saveFile}
+					isSaving={this.state.isSaving} />
 			</div>
 		)
 	}

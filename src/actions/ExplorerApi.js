@@ -1,5 +1,4 @@
-import axiosInstance from './AxiosExplorer';
-
+import {axiosInstance} from './AxiosExplorer'; 
 
 /**
  * Appelle l'API "getToken" pour récupérer un token JWT à partir du login et du password
@@ -8,7 +7,7 @@ import axiosInstance from './AxiosExplorer';
  * @param {*} callbackSuccess (token)
  * @param {*} callbackError (err)
  */
-export const getApiToken = (login, password, callbackSuccess, callbackError) => {
+export const apiGetToken = (login, password, callbackSuccess, callbackError) => {
 
     var params = {
         params: {
@@ -38,7 +37,7 @@ export const getApiToken = (login, password, callbackSuccess, callbackError) => 
  * @param {*} callbackSuccess (files, dir)
  * @param {err} callbackError (err)
  */
-export const getApiListFiles = (path, token, callbackSuccess, callbackError) => {
+export const apiGetListFiles = (path, token, callbackSuccess, callbackError) => {
 
     var encodedURI = encodeURIComponent(path);
 
@@ -76,7 +75,7 @@ export const getApiListFiles = (path, token, callbackSuccess, callbackError) => 
  * @param {*} callbackSuccess (file) 
  * @param {*} callbackError (err)
  */
-export const getApiGetFile = (path, token, callbackSuccess, callbackError) => {
+export const apiGetFile = (path, token, callbackSuccess, callbackError) => {
 
     var encodedURI = encodeURIComponent(path);
 
@@ -101,6 +100,40 @@ export const getApiGetFile = (path, token, callbackSuccess, callbackError) => {
                 }
 
                 callbackSuccess(file);
+            }
+
+        })
+        .catch((err) => {
+            callbackError(err.message);
+        });
+
+};
+
+
+/**
+ * Appelle l'API "getFile" qui retourne le contenu d'un fichier
+ * @param {*} path chemin du fichier
+ * @param {*} token token JWT
+ * @param {*} callbackSuccess (file) 
+ * @param {*} callbackError (err)
+ */
+export const apiCreateFile = (filename, content, token, callbackSuccess, callbackError) => {
+
+    var encodedURI = encodeURIComponent(filename);
+
+    var data = {
+        filename: encodedURI,
+        content: content,
+        token: token
+    };
+
+    // Récupération de la liste des fichiers
+    axiosInstance.post("/createFile.php", data)
+        .then(res => {
+            if (res.data.error !== undefined) {
+                callbackError(res.data.error);
+            } else {
+                callbackSuccess();
             }
 
         })

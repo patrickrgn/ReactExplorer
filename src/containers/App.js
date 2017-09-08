@@ -5,7 +5,7 @@ import React from 'react';
 
 import Explorer from './Explorer';
 import Login from './Login';
-import { getApiToken, getApiListFiles, getApiGetFile } from '../actions/ExplorerApi';
+import { apiGetToken, apiGetListFiles, apiGetFile, apiCreateFile } from '../actions/ExplorerApi';
 import ToolbarExplorer from '../components/ToolbarExplorer';
 
 class App extends React.Component {
@@ -43,16 +43,16 @@ class App extends React.Component {
 	}
 
 	actionLogin = (login, password) => {
-		getApiToken(login, password, (token) => {
+		apiGetToken(login, password, (token) => {
 			this.setState({ token, isDeconnected: false, login });
 		}, (err) => {
 			this.setState({ message: err })
 		});
 	}
 
-	actionListFiles = (path, callbackSuccess, callbackError) => {
+	actionGetListFiles = (path, callbackSuccess, callbackError) => {
 		if (this.state.token !== "") {
-			getApiListFiles(path, this.state.token, (files, dir) => {
+			apiGetListFiles(path, this.state.token, (files, dir) => {
 				callbackSuccess(files, dir);
 			}, (err) => {
 				if (err === "Erreur token") {
@@ -65,9 +65,21 @@ class App extends React.Component {
 	};
 
 	actionGetFile = (path, callbackSuccess, callbackError) => {
-		getApiGetFile(path, this.state.token, (file) => {
+		apiGetFile(path, this.state.token, (file) => {
 			callbackSuccess(file);
 
+		}, (err) => {
+			if (err === "Erreur token") {
+				this.deleteToken();
+			}
+			callbackError(err);
+		});
+
+	};
+
+	actionCreateFile = (path, content, callbackSuccess, callbackError) => {
+		apiCreateFile(path, content, this.state.token, () => {
+			callbackSuccess();
 		}, (err) => {
 			if (err === "Erreur token") {
 				this.deleteToken();
@@ -108,8 +120,9 @@ class App extends React.Component {
 				<div>
 					<ToolbarExplorer  connected={true} actionDeconnexion={this.actionDeconnexion} login={this.state.login}/>
 					<Explorer token={this.state.token}
-						actionListFiles={this.actionListFiles}
-						actionGetFile={this.actionGetFile} />
+						actionGetListFiles={this.actionGetListFiles}
+						actionGetFile={this.actionGetFile} 
+						actionCreateFile={this.actionCreateFile}/>
 				</div>)
 		} else {
 			// Si utilisateur non connecté => Login
