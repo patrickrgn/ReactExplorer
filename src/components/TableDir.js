@@ -2,7 +2,8 @@
 import React from 'react';
 import IconButton from 'material-ui/IconButton';
 import DeleteIcon from 'material-ui/svg-icons/action/delete';
-// import { FileFolder} from 'material-ui/svg-icons/file/folder';
+
+import PopinConfirm from './PopinConfirm';
 
 import {
 	Table,
@@ -17,6 +18,8 @@ class TableDir extends React.Component {
 
 	state = {
 		selected: [],
+		openPopinConfirm: false,
+		file: undefined
 	};
 
 	isSelected = (index) => {
@@ -66,7 +69,16 @@ class TableDir extends React.Component {
 	}
 
 	handleDelete = (event) => {
-		this.props.actionDeleteFile(this.props.files[event.currentTarget.id].filename);
+		this.setState({openPopinConfirm: true, file: this.props.files[event.currentTarget.id].filename});
+	}
+
+	closeDeleteFile = () => {
+		this.setState({openPopinConfirm: false, file: undefined});
+	}
+
+	actionConfirmDelete = () => {
+		this.props.actionDeleteFile(this.state.file);
+		this.setState({openPopinConfirm: false, file: undefined});
 	}
 
 	actionFormater = (key) => {
@@ -75,13 +87,11 @@ class TableDir extends React.Component {
 			iconHoverColor: '#ff0000'
 		}
 
-		var id = "delete-"+key;
-
 		return (<div>
-					<IconButton id={key} tooltip="Supprimer" iconStyle={style} onClick={this.handleDelete}>
-						<DeleteIcon/>
-					</IconButton>
-				</div>);
+			<IconButton id={key} tooltip="Supprimer" iconStyle={style} onClick={this.handleDelete}>
+				<DeleteIcon />
+			</IconButton>
+		</div>);
 	}
 
 	render() {
@@ -119,23 +129,31 @@ class TableDir extends React.Component {
 				<TableRowColumn style={style.actions}>{this.actionFormater(key)}</TableRowColumn>
 			</TableRow>);
 
+
+		const textPopinConfirm = "Êtes-vous sûr de vouloir supprimer le fichier : " + this.state.file;
 		return (
-			<Table selectable={false}
-				multiSelectable={false}>
-				<TableHeader displaySelectAll={false} adjustForCheckbox={false}>
-					<TableRow>
-						<TableHeaderColumn style={style.icon}></TableHeaderColumn>
-						<TableHeaderColumn style={style.name}>Nom</TableHeaderColumn>
-						<TableHeaderColumn style={style.size}>Taille</TableHeaderColumn>
-						<TableHeaderColumn style={style.type}>Type</TableHeaderColumn>
-						<TableHeaderColumn style={style.filename}>Chemin complet</TableHeaderColumn>
-						<TableHeaderColumn style={style.actions}>Actions</TableHeaderColumn>
-					</TableRow>
-				</TableHeader>
-				<TableBody displayRowCheckbox={false} showRowHover={true} stripedRows={true}>
-					{files}
-				</TableBody>
-			</Table>
+			<div>
+				<Table selectable={false}
+					multiSelectable={false}>
+					<TableHeader displaySelectAll={false} adjustForCheckbox={false}>
+						<TableRow>
+							<TableHeaderColumn style={style.icon}></TableHeaderColumn>
+							<TableHeaderColumn style={style.name}>Nom</TableHeaderColumn>
+							<TableHeaderColumn style={style.size}>Taille</TableHeaderColumn>
+							<TableHeaderColumn style={style.type}>Type</TableHeaderColumn>
+							<TableHeaderColumn style={style.filename}>Chemin complet</TableHeaderColumn>
+							<TableHeaderColumn style={style.actions}>Actions</TableHeaderColumn>
+						</TableRow>
+					</TableHeader>
+					<TableBody displayRowCheckbox={false} showRowHover={true} stripedRows={true}>
+						{files}
+					</TableBody>
+				</Table>
+				<PopinConfirm actionConfirm={this.actionConfirmDelete} 
+							text={textPopinConfirm}
+							open={this.state.openPopinConfirm} 
+							actionClose={this.closeDeleteFile} />
+			</div>
 		)
 	}
 
