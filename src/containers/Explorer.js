@@ -18,7 +18,7 @@ class Explorer extends React.Component {
 
 	state = {
 		files: [],
-		dir: "C:/Developpement/wamp64/www/test",
+		dir: "C:/Developpement/wamp64/www",
 
 		// Popin ShowDile
 		isLoading: false,

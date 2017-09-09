@@ -2,7 +2,9 @@
 import React from 'react';
 import IconButton from 'material-ui/IconButton';
 import DeleteIcon from 'material-ui/svg-icons/action/delete';
-
+import FolderIcon from 'material-ui/svg-icons/file/folder';
+import DescriptionIcon from 'material-ui/svg-icons/action/description';
+import {red500, grey500} from 'material-ui/styles/colors';
 import PopinConfirm from './PopinConfirm';
 
 import {
@@ -54,10 +56,15 @@ class TableDir extends React.Component {
 
 	// Gère le lien sur le nom
 	iconFormater = (file) => {
+
+		const style = {
+			fill: grey500
+		}
+
 		if (file.type === "Dossier")
-			return (<div></div>);
+			return (<FolderIcon style={style}/>);
 		else
-			return (<div></div>);
+			return (<DescriptionIcon style={style}/>);
 	};
 
 	sizeFormater = (size) => {
@@ -84,14 +91,10 @@ class TableDir extends React.Component {
 	actionFormater = (key) => {
 
 		const style = {
-			iconHoverColor: '#ff0000'
+			fill: red500
 		}
 
-		return (<div>
-			<IconButton id={key} tooltip="Supprimer" iconStyle={style} onClick={this.handleDelete}>
-				<DeleteIcon />
-			</IconButton>
-		</div>);
+		return (<IconButton id={key} tooltip="Supprimer" iconStyle={style} onClick={this.handleDelete}><DeleteIcon/></IconButton>);
 	}
 
 	render() {
@@ -99,7 +102,9 @@ class TableDir extends React.Component {
 		const style = {
 			icon: {
 				width: '40px',
+				'text-align': 'center',
 				padding: 0
+				
 			},
 			name: {
 				width: '200px'
