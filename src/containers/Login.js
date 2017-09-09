@@ -22,14 +22,14 @@ class Login extends React.Component {
     validateForm() {
         return this.state.login.length > 0 && this.state.password.length > 0;
     };
-
     handleChange = event => {
         this.setState({
             [event.target.id]: event.target.value
         });
     };
-
     handleSubmit = event => {
+
+        event.preventDefault();
         var error = false;
         if (this.state.login === undefined || this.state.login === "") {
             this.setState({ errorLogin: "Champs requis" });
@@ -49,7 +49,6 @@ class Login extends React.Component {
             this.props.actionLogin(this.state.login, this.state.password);
         }
 
-        event.preventDefault();
     };
 
     showMessage = () => {
@@ -92,7 +91,7 @@ class Login extends React.Component {
 
                     <div style={styles.header}>Authentification</div>
                     {this.showMessage()}
-                    <form onSubmit={this.handleSubmit}>
+                    <form onSubmit={e => this.handleSubmit(e)}>
                         <TextField
                             id="login"
                             name="login"
@@ -102,6 +101,7 @@ class Login extends React.Component {
                         /><br />
                         <TextField
                             id="password"
+                            name="password"
                             hintText="Password"
                             floatingLabelText="Password"
                             type="password"
@@ -109,6 +109,7 @@ class Login extends React.Component {
                             onChange={this.handleChange}
                         /><br />
                         <RaisedButton
+                            type="submit"
                             label="Se connecter"
                             primary={true}
                             style={styles.actionButton}
