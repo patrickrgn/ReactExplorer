@@ -15,20 +15,20 @@ class LoadingButton extends React.Component {
     render() {
 
         const style = {
-			margin: 12,
-		  };
+            margin: 12,
+        };
 
         const label = (this.props.isLoading) ? this.props.msgLoading : this.props.msgLoaded;
         const disabled = (this.props.isLoading) ? true : false;
 
-        if(this.props.type === "primary") {
+        if (this.props.type === "primary") {
             return (<RaisedButton id={this.props.id}
                 label={label}
                 primary={true}
                 disabled={disabled}
-                onMouseUp={this.handleClick} 
+                onMouseUp={this.handleClick}
                 style={style} />)
-        } else if(this.props.type === "secondary") {
+        } else if (this.props.type === "secondary") {
             return (<RaisedButton id={this.props.id}
                 label={label}
                 secondary={true}
@@ -52,7 +52,7 @@ class LoadingButton extends React.Component {
         msgLoaded: React.PropTypes.string.isRequired,
         isLoading: React.PropTypes.bool.isRequired,
         msgLoading: React.PropTypes.string
-	};
+    };
 
 }
 

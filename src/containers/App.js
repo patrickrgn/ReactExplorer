@@ -1,8 +1,6 @@
 // REACT
 import React from 'react';
 
-
-
 import Explorer from './Explorer';
 import Login from './Login';
 import { apiGetToken, apiGetListFiles, apiGetFile, apiCreateFile, apiDeleteFile } from '../actions/ExplorerApi';
@@ -144,8 +142,6 @@ class App extends React.Component {
 				</div>)
 		}
 	}
-
-
 
 }
 
