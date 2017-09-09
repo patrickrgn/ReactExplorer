@@ -102,7 +102,7 @@ class TableDir extends React.Component {
 		const style = {
 			icon: {
 				width: '40px',
-				'text-align': 'center',
+				'textAlign': 'center',
 				padding: 0
 				
 			},
