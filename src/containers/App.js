@@ -3,7 +3,7 @@ import React from 'react';
 
 import Explorer from './Explorer';
 import Login from './Login';
-import { apiGetToken, apiGetListFiles, apiGetFile, apiCreateFile, apiDeleteFile } from '../actions/ExplorerApi';
+import { apiGetToken, apiGetListFiles, apiGetFile, apiCreateFile, apiEditFile, apiDeleteFile } from '../actions/ExplorerApi';
 import ToolbarExplorer from '../components/ToolbarExplorer';
 
 class App extends React.Component {
@@ -13,27 +13,20 @@ class App extends React.Component {
 		const token = localStorage.getItem("token");
 
 		if (token !== null && token !== undefined) {
-			this.state = { token, isDeconnected: false };
+			this.state = { isConnected: true };
 
 		}
 	}
 
-
 	state = {
-		token: undefined,
 		login: undefined,
 		message: undefined,
-		isDeconnected: true
-	};
-
-
-	componentDidUpdate = (prevProps, prevState) => {
-		if (this.state.token !== prevState.token)
-			localStorage.token = this.state.token;
+		isConnected: false
 	};
 
 	deleteToken = () => {
-		this.setState({ token: undefined, isDeconnected: true });
+		this.setState({isConnected: false });
+		localStorage.removeItem("token");
 	}
 
 	actionDeconnexion = () => {
@@ -50,12 +43,13 @@ class App extends React.Component {
 
 	actionLogin = (login, password) => {
 		apiGetToken(login, password)
-			.then(token => this.setState({ token, isDeconnected: false, login }))
+			.then(token => localStorage.setItem("token", token))
+			.then(token => this.setState({ isConnected: true, login, message: undefined }))
 			.catch(err => this.setState({ message: err }));
 	}
 
 	actionGetListFiles = (path) => {
-		var token = this.state.token;
+		var token = localStorage.getItem("token");
 		var _this = this;
 		return new Promise((resolve, reject) => {
 			apiGetListFiles(path, token)
@@ -67,7 +61,7 @@ class App extends React.Component {
 
 	actionGetFile = (path) => {
 		var _this = this;
-		var token = this.state.token;
+		var token = localStorage.getItem("token");
 		return new Promise((resolve, reject) => {
 			apiGetFile(path, token)
 				.then(res => resolve(res))
@@ -78,7 +72,7 @@ class App extends React.Component {
 
 	actionDeleteFile = (path) => {
 		var _this = this;
-		var token = this.state.token;
+		var token = localStorage.getItem("token");
 		return new Promise((resolve, reject) => {
 			apiDeleteFile(path, token)
 				.then(res => resolve(res))
@@ -89,56 +83,51 @@ class App extends React.Component {
 
 	actionCreateFile = (path, content) => {
 		var _this = this;
+		var token = localStorage.getItem("token");
 		return new Promise((resolve, reject) => {
-			apiCreateFile(path, content, _this.state.token)
+			apiCreateFile(path, content, token)
 				.then(res => resolve(true))
 				.catch(err => _this.verifyErrorToken(err))
 				.catch(err => reject(err));
 		});
 	};
 
-	handleSubmit = event => {
-		var error = false;
-		if (this.state.login === undefined || this.state.login === "") {
-			this.setState({ errorLogin: "Champs requis" });
-			error = true;
-		} else {
-			this.setState({ errorLogin: "" });
-		}
-		if (this.state.password === undefined || this.state.password === "") {
-			this.setState({ errorPassword: "Champs requis" });
-			error = true;
-		} else {
-			this.setState({ errorPassword: "" });
-		}
-
-
-		if (!error) {
-			this.props.actionLogin(this.state.login, this.state.password);
-		}
-
-		event.preventDefault();
+	actionEditFile = (path, content) => {
+		var _this = this;
+		var token = localStorage.getItem("token");
+		return new Promise((resolve, reject) => {
+			apiEditFile(path, content, token)
+				.then(res => resolve(true))
+				.catch(err => _this.verifyErrorToken(err))
+				.catch(err => reject(err));
+		});
 	};
 
 	render() {
-
-		if (this.state.token !== undefined) {
+		var token = localStorage.getItem("token");
+		if (token !== undefined && this.state.isConnected) {
 			// Si utilisateur connecté => Explorer
 			return (
 				<div>
-					<ToolbarExplorer connected={true} actionDeconnexion={this.actionDeconnexion} login={this.state.login} />
-					<Explorer token={this.state.token}
+					<ToolbarExplorer 
+						connected={true} 
+						actionDeconnexion={this.actionDeconnexion} 
+						login={this.state.login} />
+					<Explorer
 						actionGetListFiles={this.actionGetListFiles}
 						actionGetFile={this.actionGetFile}
 						actionCreateFile={this.actionCreateFile}
-						actionDeleteFile={this.actionDeleteFile} />
+						actionDeleteFile={this.actionDeleteFile}
+						actionEditFile={this.actionEditFile} />
 				</div>)
 		} else {
 			// Si utilisateur non connecté => Login
 			return (
 				<div>
 					<ToolbarExplorer connected={false} />
-					<Login actionLogin={this.actionLogin} msgError={this.state.message} />
+					<Login 
+						actionLogin={this.actionLogin} 
+						msgError={this.state.message} />
 				</div>)
 		}
 	}

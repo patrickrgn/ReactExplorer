@@ -9,11 +9,11 @@ import LoadingButton from './LoadingButton';
 export default class PopinConfirm extends React.Component {
 
     handleClose = () => {
-        this.props.actionClose();
+        this.props.close();
     };
 
     handleValidate = () => {
-        this.props.actionConfirm();
+        this.props.confirm();
     };
 
     render() {

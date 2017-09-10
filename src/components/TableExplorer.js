@@ -2,10 +2,11 @@
 import React from 'react';
 import IconButton from 'material-ui/IconButton';
 import DeleteIcon from 'material-ui/svg-icons/action/delete';
+import VisibilityIcon from 'material-ui/svg-icons/action/visibility';
 import FolderIcon from 'material-ui/svg-icons/file/folder';
 import DescriptionIcon from 'material-ui/svg-icons/action/description';
-import {red500, grey500} from 'material-ui/styles/colors';
-import PopinConfirm from './PopinConfirm';
+import ModeEditIcon from 'material-ui/svg-icons/editor/mode-edit';
+import { pink500, ping800, grey500, cyan500 } from 'material-ui/styles/colors';
 
 import {
 	Table,
@@ -16,11 +17,10 @@ import {
 	TableRowColumn,
 } from 'material-ui/Table';
 
-class TableDir extends React.Component {
+class TableExplorer extends React.Component {
 
 	state = {
 		selected: [],
-		openPopinConfirm: false,
 		file: undefined
 	};
 
@@ -34,24 +34,9 @@ class TableDir extends React.Component {
 		});
 	};
 
-
 	// Action si l'utilisateur clique sur un Dossier
 	clickDir = (dir) => {
 		this.props.actionListFiles(dir);
-	};
-
-	// Action si l'utilisateur clique sur un fichier
-	clickFile = (file) => {
-		this.props.actionGetFile(file);
-	};
-
-
-	// Gère le lien sur le nom
-	nameFormater = (file) => {
-		if (file.type === "Dossier")
-			return (<a href="#" onClick={(e) => this.clickDir(file.filename)}>{file.name}</a>);
-		else
-			return (<a href="#" onClick={(e) => this.clickFile(file.filename)}>{file.name}</a>);
 	};
 
 	// Gère le lien sur le nom
@@ -62,40 +47,85 @@ class TableDir extends React.Component {
 		}
 
 		if (file.type === "Dossier")
-			return (<FolderIcon style={style}/>);
+			return (<FolderIcon style={style} />);
 		else
-			return (<DescriptionIcon style={style}/>);
+			return (<DescriptionIcon style={style} />);
 	};
 
-	sizeFormater = (size) => {
-		var aSize = Math.abs(parseInt(size, 10));
-		var def = [[1, 'octets'], [1024, 'ko'], [1024 * 1024, 'Mo'], [1024 * 1024 * 1024, 'Go'], [1024 * 1024 * 1024 * 1024, 'To']];
-		for (var i = 0; i < def.length; i++) {
-			if (aSize < def[i][0]) return (aSize / def[i - 1][0]).toFixed(2) + ' ' + def[i - 1][1];
+	// Gère le lien sur le nom
+	nameFormater = (file) => {
+		if (file.type === "Dossier")
+			return (<a href="#" onClick={(e) => this.clickDir(file.filename)}>{file.name}</a>);
+		else
+			return (file.name);
+	};
+
+	sizeFormater = (file) => {
+
+		var size = file.size;
+		if (file.type !== "Dossier") {
+			if (size > 0) {
+				var aSize = Math.abs(parseInt(size, 10));
+				var def = [[1, 'octets'], [1024, 'ko'], [1024 * 1024, 'Mo'], [1024 * 1024 * 1024, 'Go'], [1024 * 1024 * 1024 * 1024, 'To']];
+				for (var i = 0; i < def.length; i++) {
+					if (aSize < def[i][0]) return (aSize / def[i - 1][0]).toFixed(2) + ' ' + def[i - 1][1];
+				}
+			} else {
+				return "vide";
+			}
+		} else {
+			return "";
 		}
 	}
 
-	handleDelete = (event) => {
-		this.setState({openPopinConfirm: true, file: this.props.files[event.currentTarget.id].filename});
-	}
-
-	closeDeleteFile = () => {
-		this.setState({openPopinConfirm: false, file: undefined});
-	}
-
-	actionConfirmDelete = () => {
-		this.props.actionDeleteFile(this.state.file);
-		this.setState({openPopinConfirm: false, file: undefined});
-	}
-
-	actionFormater = (key) => {
+	actionFormater = (file, key) => {
 
 		const style = {
-			fill: red500
+			delete: {
+				fill: pink500,
+				iconHoverColor: ping800
+			},
+			edit: {
+				fill: cyan500
+			}
 		}
 
-		return (<IconButton id={key} tooltip="Supprimer" iconStyle={style} onClick={this.handleDelete}><DeleteIcon/></IconButton>);
+		if (file.type === "Dossier") {
+
+			return (<div>
+
+			</div>);
+		} else {
+			return (<div>
+				<IconButton id={key} tooltip="Supprimer" iconStyle={style.delete} onClick={this.handleDelete}><DeleteIcon /></IconButton>
+				<IconButton id={key} tooltip="Modifier" iconStyle={style.edit} onClick={this.handleEdit}><ModeEditIcon /></IconButton>
+				<IconButton id={key} tooltip="Visualiser" iconStyle={style.edit} onClick={this.handleShowFile}><VisibilityIcon /></IconButton>
+			</div>);
+		}
 	}
+
+	/**
+	 * DELETE
+	 */
+	handleDelete = (event) => {
+		this.props.actionDeleteFile(this.props.files[event.currentTarget.id]);
+	}
+
+	/**
+	 * EDIT
+	 */
+	handleEdit = (event) => {
+		this.props.actionEditFile(this.props.files[event.currentTarget.id]);
+	}
+
+	/**
+	 * SHOW
+	 */
+	handleShowFile = (event) => {
+		this.props.actionGetFile(this.props.files[event.currentTarget.id].filename);
+	};
+
+	
 
 	render() {
 
@@ -104,7 +134,6 @@ class TableDir extends React.Component {
 				width: '40px',
 				'textAlign': 'center',
 				padding: 0
-				
 			},
 			name: {
 				width: '200px'
@@ -128,14 +157,12 @@ class TableDir extends React.Component {
 			.map(key => <TableRow key={key} selectable={false}>
 				<TableRowColumn style={style.icon}>{this.iconFormater(this.props.files[key])}</TableRowColumn>
 				<TableRowColumn style={style.name}>{this.nameFormater(this.props.files[key])}</TableRowColumn>
-				<TableRowColumn style={style.type}>{this.sizeFormater(this.props.files[key].size)}</TableRowColumn>
+				<TableRowColumn style={style.type}>{this.sizeFormater(this.props.files[key])}</TableRowColumn>
 				<TableRowColumn style={style.type}>{this.props.files[key].type}</TableRowColumn>
 				<TableRowColumn style={style.filename}>{this.props.files[key].filename}</TableRowColumn>
-				<TableRowColumn style={style.actions}>{this.actionFormater(key)}</TableRowColumn>
+				<TableRowColumn style={style.actions}>{this.actionFormater(this.props.files[key], key)}</TableRowColumn>
 			</TableRow>);
 
-
-		const textPopinConfirm = "Êtes-vous sûr de vouloir supprimer le fichier : " + this.state.file;
 		return (
 			<div>
 				<Table selectable={false}
@@ -154,14 +181,11 @@ class TableDir extends React.Component {
 						{files}
 					</TableBody>
 				</Table>
-				<PopinConfirm actionConfirm={this.actionConfirmDelete} 
-							text={textPopinConfirm}
-							open={this.state.openPopinConfirm} 
-							actionClose={this.closeDeleteFile} />
+
 			</div>
 		)
 	}
 
 }
 
-export default TableDir;
+export default TableExplorer;

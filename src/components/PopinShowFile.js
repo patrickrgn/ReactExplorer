@@ -7,35 +7,34 @@ import FlatButton from 'material-ui/FlatButton';
 
 class PopinShowFile extends React.Component {
 
-    
     state = {
         typeImage: ['image/jpeg', 'image/png', 'image/bmp']
-
-
     }
-
-    
 
     handleClose = () => {
         this.props.close();
     };
 
     showContent = () => {
-        var type = mime.lookup(this.props.file.filename);
-        //var filename = this.props.file.filename;
+        if (this.props.file !== undefined) {
+            var type = mime.lookup(this.props.file.filename);
+            //var filename = this.props.file.filename;
 
-        if (this.state.typeImage.indexOf(type) > -1) {
-            return (<div>Image</div>)
-        } else {
-            return (<div className="modal-pre"><pre>{this.props.file.content}</pre></div>)
+            if (this.state.typeImage.indexOf(type) > -1) {
+                return (<div>Image</div>)
+            } else {
+                return (<div className="modal-pre"><pre>{this.props.file.content}</pre></div>)
+            }
         }
-
     };
 
 
     render() {
 
-        const title = "Fichier : " + this.props.file.filename;
+        var title = "";
+        if (this.props.file !== undefined) {
+            title = "Fichier : " + this.props.file.filename;
+        }
 
         const actions = [
             <FlatButton
@@ -48,19 +47,19 @@ class PopinShowFile extends React.Component {
         const customContentStyle = {
             width: '80%',
             maxWidth: 'none',
-          };
+        };
 
 
         return (
             <div>
                 <Dialog
-                title={title}
-                actions={actions}
-                modal={false}
-                open={this.props.showFile}
-                onRequestClose={this.handleClose}
-                autoScrollBodyContent={true}
-                contentStyle={customContentStyle}>
+                    title={title}
+                    actions={actions}
+                    modal={false}
+                    open={this.props.open}
+                    onRequestClose={this.handleClose}
+                    autoScrollBodyContent={true}
+                    contentStyle={customContentStyle}>
                     {this.showContent()}
                 </Dialog>
             </div>

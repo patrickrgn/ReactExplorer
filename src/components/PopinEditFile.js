@@ -22,17 +22,20 @@ class PopinEditFile extends React.Component {
     };
 
     handleSave = () => {
-        this.props.actionSaveFile(this.state.name, this.state.content);
+        this.props.saveFile(this.state.name, this.state.content);
     };
 
     handleClose = () => {
-        this.props.actionClose();
+        this.props.close();
     };
 
 
     render() {
 
-        const title = "Création du fichier";
+        const title = (this.props.file !== undefined ? "Edition du fichier" : "Création du fichier");
+        const name = (this.props.file !== undefined ? this.props.file.name : "");
+        const content = (this.props.file !== undefined ? this.props.file.content : "");
+        const disabled = (this.props.file !== undefined ? true : false);
 
         const actions = [
             <FlatButton
@@ -79,7 +82,7 @@ class PopinEditFile extends React.Component {
                     title={title}
                     actions={actions}
                     modal={true}
-                    open={this.props.showPopin}
+                    open={this.props.open}
                     onRequestClose={this.handleClose}
                     autoScrollBodyContent={true}
                     contentStyle={customContentStyle}>
@@ -91,6 +94,8 @@ class PopinEditFile extends React.Component {
                             floatingLabelText="Nom du fichier"
                             errorText={this.state.errorName}
                             onChange={this.handleChange}
+                            defaultValue={name}
+                            disabled={disabled}
                         />
                     </Paper>
 
@@ -103,6 +108,8 @@ class PopinEditFile extends React.Component {
                             onChange={this.handleChange}
                             multiLine={true}
                             rows={10}
+                            fullWidth={true}
+                            defaultValue={content}
                         />
                     </Paper>
 
@@ -111,8 +118,6 @@ class PopinEditFile extends React.Component {
             </div>
         )
     }
-
-
 
 }
 

@@ -56,15 +56,11 @@ export const apiGetListFiles = (path, token) => {
                     res.data.files.forEach(file => {
                         files.push(file);
                     })
-
                     var data = {files: files, dir: res.data.dir};
                     resolve(data);
                 }
-
             })
-            .catch((err) => {
-                reject(err);
-            });
+            .catch((err) => reject(err));
 
     });
 
@@ -147,6 +143,40 @@ export const apiCreateFile = (filename, content, token) => {
     });
 }
 
+// /**
+//  * Appelle l'API "getFile" qui retourne le contenu d'un fichier
+//  * @param {*} path chemin du fichier
+//  * @param {*} token token JWT
+//  * @param {*} callbackSuccess (file) 
+//  * @param {*} callbackError (err)
+//  */
+export const apiEditFile = (filename, content, token) => {
+    
+    
+        var encodedURI = encodeURIComponent(filename);
+    
+        var data = {
+            filename: encodedURI,
+            content: content,
+            token: token
+        };
+    
+        return new Promise((resolve, reject) => {
+            // Récupération de la liste des fichiers
+            axiosInstance.post("/editFile.php", data)
+                .then(res => {
+                    if (res.data.error !== undefined) {
+                        reject(res.data.error);
+                    } else {
+                        resolve(true);
+                    }
+    
+                })
+                .catch((err) => {
+                    reject(err);
+                });
+        });
+    }
 
 /**
  * Appelle l'API "deleteFile" qui supprime le fichier
