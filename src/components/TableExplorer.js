@@ -96,10 +96,11 @@ class TableExplorer extends React.Component {
 
 			</div>);
 		} else {
+
 			return (<div>
-				<IconButton id={key} tooltip="Supprimer" iconStyle={style.delete} onClick={this.handleDelete}><DeleteIcon /></IconButton>
-				<IconButton id={key} tooltip="Modifier" iconStyle={style.edit} onClick={this.handleEdit}><ModeEditIcon /></IconButton>
 				<IconButton id={key} tooltip="Visualiser" iconStyle={style.edit} onClick={this.handleShowFile}><VisibilityIcon /></IconButton>
+				<IconButton id={key} tooltip="Modifier" iconStyle={style.edit} onClick={this.handleEdit}><ModeEditIcon /></IconButton>
+				<IconButton id={key} tooltip="Supprimer" iconStyle={style.delete} onClick={this.handleDelete}><DeleteIcon /></IconButton>
 			</div>);
 		}
 	}
